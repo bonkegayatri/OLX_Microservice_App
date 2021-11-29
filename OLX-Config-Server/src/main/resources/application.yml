@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: configuration-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/bonkegayatri/olx-config.git
+          default-label: master
+          username: bonkegayatri
+          password: NewNew@12345
+          clone-on-start: true
+          
+server:
+  port: 8888
