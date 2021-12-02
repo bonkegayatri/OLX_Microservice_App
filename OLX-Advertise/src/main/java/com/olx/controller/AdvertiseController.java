@@ -1,7 +1,7 @@
 package com.olx.controller;
 
 import java.util.Collection;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class AdvertiseController {
 	@RequestParam(value = "title", required = false) String title,
 	@RequestParam(value = "price", required = false) Double price,
 	@RequestParam(value = "status", required = false) String status,
-	@RequestParam(value = "createdDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date createdDate) {
+	@RequestParam(value = "createdDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdDate) {
 
 	 return advertisementService.searchAdvertisementByFilter(title, price, status, createdDate);
 

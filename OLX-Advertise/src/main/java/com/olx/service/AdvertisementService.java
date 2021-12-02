@@ -1,7 +1,7 @@
 package com.olx.service;
 
 import java.util.Collection;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +17,7 @@ public interface AdvertisementService {
 			String title,
 			Double price,
 			String status,
-			Date createdDate);
+			LocalDate createdDate);
 	
 	public List<Advertise> searchAdvertisementBySearchText(@RequestParam("searchText") String searchText);
 	

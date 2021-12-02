@@ -1,6 +1,6 @@
 package com.olx.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,18 +21,18 @@ public class Advertise {
 	private String description;
 
 	@ApiModelProperty("Date of the Advertise")
-	private Date createdDate;
+	private LocalDate createdDate;
 
 	@ApiModelProperty("Date of the Advertise")
-	private Date modifiedDate;
+	private LocalDate modifiedDate;
 
 	@ApiModelProperty("status of the Advertise")
 	private String status;
 
 	public Advertise() {}
 
-	public Advertise(int categoryId, String title, double price, String description, Date createdDate,
-			Date modifiedDate, String status) {
+	public Advertise(int categoryId, String title, double price, String description, LocalDate createdDate,
+			LocalDate modifiedDate, String status) {
 		super();
 		this.categoryId = categoryId;
 		this.title = title;
@@ -43,7 +43,7 @@ public class Advertise {
 		this.status = status;
 	}
 
-	public Advertise(String title, double price, String description, Date createdDate, Date modifiedDate,
+	public Advertise(String title, double price, String description, LocalDate createdDate, LocalDate modifiedDate,
 			String status) {
 		super();
 		this.title = title;
@@ -86,19 +86,19 @@ public class Advertise {
 		this.description = description;
 	}
 
-	public Date getCreatedDate() {
+	public LocalDate getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(Date createdDate) {
+	public void setCreatedDate(LocalDate createdDate) {
 		this.createdDate = createdDate;
 	}
 
-	public Date getModifiedDate() {
+	public LocalDate getModifiedDate() {
 		return modifiedDate;
 	}
 
-	public void setModifiedDate(Date modifiedDate) {
+	public void setModifiedDate(LocalDate modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
 

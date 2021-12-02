@@ -2,9 +2,9 @@ package com.olx.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -47,7 +47,7 @@ public class AdvertisementServiceImp implements AdvertisementService {
 	}
 	
 	@Override
-	public Collection<Advertise> searchAdvertisementByFilter(String title, Double price, String status, Date createdDate) {
+	public Collection<Advertise> searchAdvertisementByFilter(String title, Double price, String status, LocalDate createdDate) {
 		/*
 		 * if(title != null) { if(price != null) { if(status != null) { if(createdDate
 		 * != null) { List<AdvertiseEntity> listAdvertiseEntity =
@@ -84,14 +84,14 @@ public class AdvertisementServiceImp implements AdvertisementService {
 		        predicates.add(cb.equal(advertiseEntity.get("title"), title));
 		    }
 		    if (price != null) {
-		        predicates.add(cb.like(advertiseEntity.get("price"), "%" + price + "%"));
+		        predicates.add(cb.equal(advertiseEntity.get("price"), price));
 		    }
 		    if (status != null) {
 		        predicates.add(cb.like(advertiseEntity.get("status"), status));
 		    }
 		    
 		    if (createdDate != null) {
-		        predicates.add(cb.like(advertiseEntity.get("createdDate"), "%" + createdDate + "%"));
+		        predicates.add(cb.equal(advertiseEntity.<LocalDate>get("createdDate"), createdDate));
 		    }
 		    
 		    cq.where(predicates.toArray(new Predicate[0]));
