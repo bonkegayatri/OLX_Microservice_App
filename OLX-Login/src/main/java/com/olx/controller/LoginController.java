@@ -3,6 +3,7 @@ package com.olx.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,8 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.olx.dto.AuthenticationRequest;
 import com.olx.dto.OlxLoginDetails;
+import com.olx.dto.UserToken;
 import com.olx.security.JwtUtil;
 import com.olx.service.OlxLoginService;
+import com.olx.service.TokenService;
 
 
 @RestController
@@ -32,17 +36,29 @@ public class LoginController {
 	AuthenticationManager autheticationManager;
 	
 	@Autowired
+	@Qualifier("JPA_SERVICE")
 	OlxLoginService olxLoginService;
 	
 	@Autowired
 	JwtUtil jwtUtil;
 	
 	@Autowired
+	@Qualifier("MONGO_SERVICE")
+	TokenService tokenService;
+
+	@Autowired
 	UserDetailsService userDetailsService;
 	
 	@DeleteMapping(value = "/user/logout")
-	public ResponseEntity<Boolean> logout(@RequestHeader("Authorization" String authorization)) {
+	public ResponseEntity<Boolean> logout(@RequestHeader("Authorization") String authorization) {
+		tokenService.saveToken(new UserToken(authorization));
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		
+	}
+	
+	@GetMapping(value="/token", produces= MediaType.APPLICATION_JSON_VALUE)
+	public List<UserToken> getAllToken(){
+		return tokenService.getAllToken();
 	}
 	
 	@PostMapping(value="/user/authenticate", consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
