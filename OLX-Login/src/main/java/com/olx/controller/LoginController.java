@@ -40,6 +40,10 @@ public class LoginController {
 	@Autowired
 	UserDetailsService userDetailsService;
 	
+	@DeleteMapping(value = "/user/logout")
+	public ResponseEntity<Boolean> logout(@RequestHeader("Authorization" String authorization)) {
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
 	
 	@PostMapping(value="/user/authenticate", consumes= {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<String> authenticate(@RequestBody AuthenticationRequest authenticationRequest){

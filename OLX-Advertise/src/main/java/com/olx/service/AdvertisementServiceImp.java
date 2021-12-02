@@ -6,6 +6,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +26,9 @@ import com.olx.repo.OlxAdvertiseRepo;
 @Service
 public class AdvertisementServiceImp implements AdvertisementService {
 
+	@Autowired
+	EntityManager entityManager;
+	
 	@Autowired
 	MasterDataDelegate masterDataDelegate;
 	
@@ -36,15 +46,61 @@ public class AdvertisementServiceImp implements AdvertisementService {
 	 return new ModelMapper();
 	}
 	
-//	private static Map<Integer, Advertise> advertiseMap = new HashMap<Integer, Advertise>();
-//	private int LastCategoryId = 2;
-//
-//	static {
-//		advertiseMap.put(1, new Advertise(1, "laptop sale", 2000, "intel core 3 Sony Vaio",new Date(),new Date(),"OPEN"));
-//		advertiseMap.put(2, new Advertise(2, "laptop sale", 2000, "intel core 3 Sony Vaio",new Date(),new Date(),"OPEN"));
-//	}
+	@Override
+	public Collection<Advertise> searchAdvertisementByFilter(String title, Double price, String status, Date createdDate) {
+		/*
+		 * if(title != null) { if(price != null) { if(status != null) { if(createdDate
+		 * != null) { List<AdvertiseEntity> listAdvertiseEntity =
+		 * olxAdvertiseRepo.findByTitleAndPriceAndStatusAndCreatedDate(title, price,
+		 * status, createdDate); return
+		 * getAdvertiseDtoListFromEntity(listAdvertiseEntity); }
+		 * 
+		 * List<AdvertiseEntity> listAdvertiseEntity =
+		 * olxAdvertiseRepo.findByTitleAndPriceAndStatus(title, price, status); return
+		 * getAdvertiseDtoListFromEntity(listAdvertiseEntity); }
+		 * 
+		 * List<AdvertiseEntity> listAdvertiseEntity =
+		 * olxAdvertiseRepo.findByTitleAndPrice(title, price); return
+		 * getAdvertiseDtoListFromEntity(listAdvertiseEntity);
+		 * 
+		 * }
+		 * 
+		 * List<AdvertiseEntity> listAdvertiseEntity =
+		 * olxAdvertiseRepo.findByTitle(title); return
+		 * getAdvertiseDtoListFromEntity(listAdvertiseEntity);
+		 * 
+		 * }
+		 * 
+		 * return null;
+		 */
+        
+		 CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		    CriteriaQuery<AdvertiseEntity> cq = cb.createQuery(AdvertiseEntity.class);
 
-
+		    Root<AdvertiseEntity> advertiseEntity = cq.from(AdvertiseEntity.class);
+		    List<Predicate> predicates = new ArrayList<>();
+		    
+		    if (title != null) {
+		        predicates.add(cb.equal(advertiseEntity.get("title"), title));
+		    }
+		    if (price != null) {
+		        predicates.add(cb.like(advertiseEntity.get("price"), "%" + price + "%"));
+		    }
+		    if (status != null) {
+		        predicates.add(cb.like(advertiseEntity.get("status"), status));
+		    }
+		    
+		    if (createdDate != null) {
+		        predicates.add(cb.like(advertiseEntity.get("createdDate"), "%" + createdDate + "%"));
+		    }
+		    
+		    cq.where(predicates.toArray(new Predicate[0]));
+		    TypedQuery<AdvertiseEntity> query = entityManager.createQuery(cq);
+		    List<AdvertiseEntity> listAdvertiseEntity = query.getResultList(); 
+		    return getAdvertiseDtoListFromEntity(listAdvertiseEntity);
+		   		          
+	}
+	
 	
 	@Override
 	public List<Advertise> searchAdvertisementBySearchText(String searchText) {
@@ -182,38 +238,6 @@ public class AdvertisementServiceImp implements AdvertisementService {
 		return olxLoginDetails;
 	}
 
-	@Override
-	public Collection<Advertise> searchAdvertisementByFilter(String title, Double price, String status, Date createdDate) {
-		if(title != null) {
-			if(price != null) {
-				if(status != null) {
-					if(createdDate != null) {
-						List<AdvertiseEntity> listAdvertiseEntity = olxAdvertiseRepo.findByTitleAndPriceAndStatusAndCreatedDate(title, price, status, createdDate);
-						return getAdvertiseDtoListFromEntity(listAdvertiseEntity);
-					}
-					
-					List<AdvertiseEntity> listAdvertiseEntity = olxAdvertiseRepo.findByTitleAndPriceAndStatus(title, price, status);
-					return getAdvertiseDtoListFromEntity(listAdvertiseEntity);
-				}
-				
-				List<AdvertiseEntity> listAdvertiseEntity = olxAdvertiseRepo.findByTitleAndPrice(title, price);
-				return getAdvertiseDtoListFromEntity(listAdvertiseEntity);
-				
-			}
-			
-			List<AdvertiseEntity> listAdvertiseEntity = olxAdvertiseRepo.findByTitle(title);
-			return getAdvertiseDtoListFromEntity(listAdvertiseEntity);
-			
-		}
-		
-//		if (title != null && price != null && status != null) {
-//			List<AdvertiseEntity> listAdvertiseEntity = olxAdvertiseRepo.findByTitleAndPriceAndStatus(title, price, status);
-//			return getAdvertiseDtoListFromEntity(listAdvertiseEntity); 
-//        }
-		
-        return null;
-	}
-	
 	
 
 }

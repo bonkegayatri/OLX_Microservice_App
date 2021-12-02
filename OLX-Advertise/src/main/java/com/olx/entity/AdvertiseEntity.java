@@ -8,6 +8,8 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -34,10 +36,12 @@ public class AdvertiseEntity {
 
 	@Column(name = "createdDate")
 	@CreatedDate
+	@Temporal(TemporalType.DATE)
 	private Date createdDate;
 
 	@Column(name = "modifiedDate")
 	@LastModifiedDate
+	@Temporal(TemporalType.DATE)
 	private Date modifiedDate;
 
 	@Column(name = "status")
