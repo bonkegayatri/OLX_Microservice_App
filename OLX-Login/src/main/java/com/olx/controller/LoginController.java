@@ -49,9 +49,12 @@ public class LoginController {
 	@Autowired
 	UserDetailsService userDetailsService;
 	
+	private int LastTokenId = 1;
+
 	@DeleteMapping(value = "/user/logout")
 	public ResponseEntity<Boolean> logout(@RequestHeader("Authorization") String authorization) {
-		tokenService.saveToken(new UserToken(authorization));
+		LastTokenId++;
+		tokenService.saveToken(new UserToken(LastTokenId,authorization));
 		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
 		
 	}
@@ -95,7 +98,25 @@ public class LoginController {
 		catch (Exception ex) {
 			return new ResponseEntity<Boolean>(isTokenValid,HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<Boolean>(isTokenValid,HttpStatus.OK);
+		
+		List<UserToken> tokenList = tokenService.getAllToken();
+		boolean isTokenBlocked = false;
+		
+		for(UserToken token: tokenList) {
+			if(token.getToken().equals(authtoken)) {
+				System.out.println("token :" + token.getToken());
+				isTokenBlocked = true;
+			}else {
+				isTokenBlocked = false;
+			}
+			System.out.println("isTokenBlocked :" + isTokenBlocked);
+		}
+		if(isTokenBlocked) {
+			return new ResponseEntity<Boolean>(false,HttpStatus.BAD_REQUEST);
+			
+		} else {
+	        return new ResponseEntity<Boolean>(isTokenValid,HttpStatus.OK);
+		}
 		
 	}
 	

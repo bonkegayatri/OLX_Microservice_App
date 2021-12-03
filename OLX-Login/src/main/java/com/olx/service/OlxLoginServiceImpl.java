@@ -12,7 +12,7 @@ import com.olx.dto.OlxLoginDetails;
 import com.olx.entity.OlxLoginEntity;
 import com.olx.repo.OlxLoginRepo;
 
-@Service
+@Service(value = "JPA_SERVICE")
 public class OlxLoginServiceImpl implements OlxLoginService{
 
 	@Autowired
