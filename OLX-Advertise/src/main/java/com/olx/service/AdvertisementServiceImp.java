@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import com.olx.dto.Advertise;
 import com.olx.entity.AdvertiseEntity;
+import com.olx.exception.InvalidAuthTokenException;
 import com.olx.exception.InvalidCategoryIdException;
 import com.olx.repo.OlxAdvertiseRepo;
 
@@ -132,7 +133,7 @@ public class AdvertisementServiceImp implements AdvertisementService {
 			return false;
 		
 		} else {
-			throw new InvalidCategoryIdException("InValid Token");
+			throw new InvalidAuthTokenException("InValid Token");
 		}
 	}
 
@@ -154,7 +155,7 @@ public class AdvertisementServiceImp implements AdvertisementService {
 			throw new InvalidCategoryIdException("" + advertiseId);
 			
 		} else {
-				throw new InvalidCategoryIdException("InValid Token");
+				throw new InvalidAuthTokenException("InValid Token");
 		}
 		
 	}
@@ -204,7 +205,7 @@ public class AdvertisementServiceImp implements AdvertisementService {
 			
 		
 		} else {
-			throw new InvalidCategoryIdException("InValid Token");
+			throw new InvalidAuthTokenException("InValid Token");
 		}
 	}
 
@@ -223,7 +224,7 @@ public class AdvertisementServiceImp implements AdvertisementService {
 			return getAdvertiseDtoFromEntity(olxLoginEntity);
 			
 		} else {
-			 throw new InvalidCategoryIdException("InValid Token");
+			 throw new InvalidAuthTokenException("InValid Token");
 		}
 				
 	}
